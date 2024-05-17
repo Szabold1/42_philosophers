@@ -20,7 +20,13 @@ CFLAGS		=	-Wall -Wextra -Werror -I$(INCLUDE_DIR)
 RM			=	rm -rf
 
 # Source files
-SRC 		=	main.c \
+SRC 		=	clean_up.c \
+				eat.c \
+				forks.c \
+				init.c \
+				main.c \
+				routine.c \
+				simulation.c \
 				utils.c
 
 # Object files

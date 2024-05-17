@@ -6,29 +6,23 @@
 /*   By: bszabo <bszabo@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:58:26 by bszabo            #+#    #+#             */
-/*   Updated: 2024/04/30 16:29:18 by bszabo           ###   ########.fr       */
+/*   Updated: 2024/05/17 09:53:39 by bszabo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-// printf 'str' to 'fd'
-static void	ft_putstr_fd(char *str, int fd)
-{
-	int	i;
-
-	i = 0;
-	if (!str)
-		return ;
-	while (str[i])
-		write(fd, &str[i++], 1);
-}
-
 // print an error message to stderr
 void	err_msg(char *msg)
 {
-	ft_putstr_fd("Error: ", 2);
-	ft_putstr_fd(msg, 2);
+	int	len;
+
+	len = 0;
+	while (msg[len])
+		len++;
+	write(2, "Error: ", 7);
+	write(2, msg, len);
+	write(2, "\n", 1);
 }
 
 // convert a string to an integer and return it
@@ -54,4 +48,42 @@ int	atoi_philo(char *str)
 		i++;
 	}
 	return (num);
+}
+
+// get the current time in milliseconds
+// 1 second = 1000 milliseconds (ms)
+long long	get_current_time(void)
+{
+	struct timeval	time;
+	long long		time_ms;
+
+	if (gettimeofday(&time, NULL) == -1)
+		return (ERR);
+	time_ms = time.tv_sec * 1000 + time.tv_usec / 1000;
+	return (time_ms);
+}
+
+// print the status of the philosopher with the current timestamp in ms
+void	print_status(t_philo *philo, char *status)
+{
+	t_data	*data;
+
+	data = philo->data;
+	pthread_mutex_lock(&data->print_lock);
+	if (data->died == false && data->nb_of_full_philos < data->nb_of_philos)
+		printf("%lld %d %s\n", get_current_time() - data->start_time,
+			philo->id, status);
+	pthread_mutex_unlock(&data->print_lock);
+}
+
+// sleep for 'time' milliseconds
+void	sleep_ms(int time)
+{
+	long long	start_time;
+
+	start_time = get_current_time();
+	if (start_time == -1)
+		return ;
+	while (get_current_time() - start_time < time)
+		usleep(1000);
 }

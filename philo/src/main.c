@@ -6,7 +6,7 @@
 /*   By: bszabo <bszabo@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:37:40 by bszabo            #+#    #+#             */
-/*   Updated: 2024/04/30 16:25:19 by bszabo           ###   ########.fr       */
+/*   Updated: 2024/05/16 13:23:42 by bszabo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,31 @@ int	check_args(int argc, char *argv[])
 	int	i;
 
 	if (argc != 5 && argc != 6)
-		return (err_msg("Invalid number of arguments\n"), ERR);
+		return (err_msg("Invalid number of arguments"), ERR);
 	i = 1;
 	while (i < argc)
 	{
 		if (atoi_philo(argv[i]) == ERR)
-			return (err_msg("Invalid argument\n"), ERR);
+			return (err_msg("Invalid argument"), ERR);
 		i++;
 	}
 	return (OK);
 }
 
+// Arguments:	(1.)number_of_philosophers
+// 				(2.)time_to_die
+// 				(3.)time_to_eat
+// 				(4.)time_to_sleep
+// 				(5.)[number_of_times_each_philosopher_must_eat]
 int	main(int argc, char *argv[])
 {
+	t_data	data;
+
 	if (check_args(argc, argv) == ERR)
 		return (1);
-	return (0);
+	if (init(argv, &data) == ERR)
+		return (clean_up(&data), 1);
+	if (simulation(&data) == ERR)
+		return (clean_up(&data), 1);
+	return (clean_up(&data), 0);
 }
