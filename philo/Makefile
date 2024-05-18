@@ -12,9 +12,12 @@ OBJ_DIR		=	obj
 INCLUDE_DIR	=	include
 HEADERS		=	$(INCLUDE_DIR)/philosophers.h
 
-# Compiler and flags
+# Compiler
 CC			=	cc
+# Compiler flags
 CFLAGS		=	-Wall -Wextra -Werror -I$(INCLUDE_DIR)
+# Linker flags
+LFLAGS		=	-lpthread
 
 # Remove command
 RM			=	rm -rf
@@ -49,7 +52,7 @@ re: fclean all
 
 # Target rules
 $(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(LFLAGS)
 
 # Create directories for object files
 $(OBJ_DIR):

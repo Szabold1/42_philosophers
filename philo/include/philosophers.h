@@ -6,7 +6,7 @@
 /*   By: bszabo <bszabo@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:37:28 by bszabo            #+#    #+#             */
-/*   Updated: 2024/05/17 09:56:05 by bszabo           ###   ########.fr       */
+/*   Updated: 2024/05/17 09:03:59 by bszabo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,14 +52,13 @@ typedef struct s_data
 	int				time_to_sleep; // time to sleep in milliseconds
 	int				nb_of_meals; // number of meals each philosopher must eat
 	long long		start_time; // start time in milliseconds
-	int				nb_of_full_philos; // number of philosophers that ate all meals
+	int				nb_of_full_philos; // number of philos that ate all meals
 	bool			died; // true if a philosopher died (time_to_die exceeded)
 	pthread_mutex_t	*forks; // array of mutexes for the forks
 	pthread_mutex_t	print_lock; // mutex for printing
 	pthread_mutex_t	lock; // mutex for general use
 	t_philo			*philos; // array of philosophers
 }	t_data;
-
 
 /* ****************************************************** Function prototypes */
 // File: clean_up.c

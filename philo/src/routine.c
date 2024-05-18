@@ -6,7 +6,7 @@
 /*   By: bszabo <bszabo@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 13:24:58 by bszabo            #+#    #+#             */
-/*   Updated: 2024/05/16 16:49:06 by bszabo           ###   ########.fr       */
+/*   Updated: 2024/05/18 07:31:34 by bszabo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static void	philo_think(t_philo *philo)
 void	*routine(void *arg)
 {
 	t_philo	*philo;
-	t_data 	*data;
+	t_data	*data;
 
 	philo = (t_philo *)arg;
 	data = philo->data;

@@ -6,7 +6,7 @@
 /*   By: bszabo <bszabo@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 09:51:14 by bszabo            #+#    #+#             */
-/*   Updated: 2024/05/17 09:54:32 by bszabo           ###   ########.fr       */
+/*   Updated: 2024/05/18 07:23:46 by bszabo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,26 +21,24 @@ static bool	check_end(t_data *data)
 	while (1)
 	{
 		i = 0;
-		while (i < data->nb_of_philos)
+		pthread_mutex_lock(&data->lock);
+		while (i < data->nb_of_philos && data->died == false)
 		{
-			pthread_mutex_lock(&data->lock);
-			if (data->nb_of_full_philos == data->nb_of_philos)
+			if (get_current_time() - data->philos[i].last_meal_time
+				> data->time_to_die)
 			{
-				// print_status(&data->philos[i], "ALL PHILOSOPHERS ATE ALL MEALS");
+				pthread_mutex_unlock(&data->lock);
+				print_status(&data->philos[i], "died");
+				pthread_mutex_lock(&data->lock);
+				data->died = true;
 				return (pthread_mutex_unlock(&data->lock), true);
 			}
-			if (get_current_time()
-				- data->philos[i].last_meal_time > data->time_to_die)
-			{
-				print_status(&data->philos[i], "died");
-				data->died = true;
-				pthread_mutex_unlock(&data->lock);
-				return (true);
-			}
-			pthread_mutex_unlock(&data->lock);
-			usleep(1000);
+			if (data->nb_of_full_philos == data->nb_of_philos)
+				return (pthread_mutex_unlock(&data->lock), true);
 			i++;
 		}
+		pthread_mutex_unlock(&data->lock);
+		usleep(500);
 	}
 	return (false);
 }
@@ -65,15 +63,17 @@ int	simulation(t_data *data)
 	int	i;
 
 	i = 0;
+	data->start_time = get_current_time();
+	if (data->start_time == -1)
+		return (ERR);
 	while (i < data->nb_of_philos)
 	{
-		data->start_time = get_current_time();
-		if (data->start_time == -1)
-			return (ERR);
-		data->philos[i].last_meal_time = data->start_time;
 		if (pthread_create(&data->philos[i].thread_id, NULL, &routine,
-			&data->philos[i]) != 0)
-			return (err_msg(THREAD_CREATE_ERR), ERR);
+				&data->philos[i]) != 0)
+			return (join_threads(data), err_msg(THREAD_CREATE_ERR), ERR);
+		pthread_mutex_lock(&data->lock);
+		data->philos[i].last_meal_time = data->start_time;
+		pthread_mutex_unlock(&data->lock);
 		i++;
 	}
 	check_end(data);

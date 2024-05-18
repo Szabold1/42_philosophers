@@ -6,7 +6,7 @@
 /*   By: bszabo <bszabo@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:58:26 by bszabo            #+#    #+#             */
-/*   Updated: 2024/05/17 09:53:39 by bszabo           ###   ########.fr       */
+/*   Updated: 2024/05/18 09:20:43 by bszabo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,17 @@ void	print_status(t_philo *philo, char *status)
 	t_data	*data;
 
 	data = philo->data;
-	pthread_mutex_lock(&data->print_lock);
+	pthread_mutex_lock(&data->lock);
 	if (data->died == false && data->nb_of_full_philos < data->nb_of_philos)
+	{
+		pthread_mutex_unlock(&data->lock);
+		pthread_mutex_lock(&data->print_lock);
 		printf("%lld %d %s\n", get_current_time() - data->start_time,
 			philo->id, status);
-	pthread_mutex_unlock(&data->print_lock);
+		pthread_mutex_unlock(&data->print_lock);
+	}
+	else
+		pthread_mutex_unlock(&data->lock);
 }
 
 // sleep for 'time' milliseconds
@@ -85,5 +91,5 @@ void	sleep_ms(int time)
 	if (start_time == -1)
 		return ;
 	while (get_current_time() - start_time < time)
-		usleep(1000);
+		usleep(100);
 }
