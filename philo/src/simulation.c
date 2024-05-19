@@ -6,7 +6,7 @@
 /*   By: bszabo <bszabo@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 09:51:14 by bszabo            #+#    #+#             */
-/*   Updated: 2024/05/18 07:23:46 by bszabo           ###   ########.fr       */
+/*   Updated: 2024/05/19 17:58:17 by bszabo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,12 +68,10 @@ int	simulation(t_data *data)
 		return (ERR);
 	while (i < data->nb_of_philos)
 	{
+		data->philos[i].last_meal_time = data->start_time;
 		if (pthread_create(&data->philos[i].thread_id, NULL, &routine,
 				&data->philos[i]) != 0)
 			return (join_threads(data), err_msg(THREAD_CREATE_ERR), ERR);
-		pthread_mutex_lock(&data->lock);
-		data->philos[i].last_meal_time = data->start_time;
-		pthread_mutex_unlock(&data->lock);
 		i++;
 	}
 	check_end(data);

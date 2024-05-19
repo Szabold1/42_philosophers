@@ -6,7 +6,7 @@
 /*   By: bszabo <bszabo@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 13:24:58 by bszabo            #+#    #+#             */
-/*   Updated: 2024/05/18 07:31:34 by bszabo           ###   ########.fr       */
+/*   Updated: 2024/05/19 17:24:15 by bszabo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ static void	philo_think(t_philo *philo)
 	{
 		pthread_mutex_unlock(&data->lock);
 		print_status(philo, "is thinking");
+		usleep(500);
 	}
 	else
 		pthread_mutex_unlock(&data->lock);
@@ -56,16 +57,16 @@ void	*routine(void *arg)
 	philo = (t_philo *)arg;
 	data = philo->data;
 	if (data->nb_of_philos == 1)
-		return (print_status(philo, "is thinking"),
+		return (print_status(philo, "has taken a fork"),
 			sleep_ms(data->time_to_die), (NULL));
 	pthread_mutex_lock(&data->lock);
 	while (data->died == false && data->nb_of_full_philos < data->nb_of_philos)
 	{
 		pthread_mutex_unlock(&data->lock);
-		philo_think(philo);
 		if (philo_eat(philo) == ERR)
 			break ;
 		philo_sleep(philo);
+		philo_think(philo);
 		pthread_mutex_lock(&data->lock);
 	}
 	pthread_mutex_unlock(&data->lock);
