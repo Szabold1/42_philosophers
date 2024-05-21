@@ -6,7 +6,7 @@
 /*   By: bszabo <bszabo@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 09:51:14 by bszabo            #+#    #+#             */
-/*   Updated: 2024/05/19 17:58:17 by bszabo           ###   ########.fr       */
+/*   Updated: 2024/05/21 16:40:21 by bszabo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,7 @@ static bool	check_end(t_data *data)
 			if (get_current_time() - data->philos[i].last_meal_time
 				> data->time_to_die)
 			{
-				pthread_mutex_unlock(&data->lock);
 				print_status(&data->philos[i], "died");
-				pthread_mutex_lock(&data->lock);
 				data->died = true;
 				return (pthread_mutex_unlock(&data->lock), true);
 			}
@@ -38,21 +36,18 @@ static bool	check_end(t_data *data)
 			i++;
 		}
 		pthread_mutex_unlock(&data->lock);
-		usleep(500);
+		usleep(1000);
 	}
 	return (false);
 }
 
 // join the threads of the philosophers
-static void	join_threads(t_data *data)
+static void	join_threads(t_data *data, int i)
 {
-	int	i;
-
-	i = 0;
-	while (i < data->nb_of_philos)
+	while (--i >= 0)
 	{
-		pthread_join(data->philos[i].thread_id, NULL);
-		i++;
+		if (pthread_join(data->philos[i].thread_id, NULL) != 0)
+			err_msg("pthread_join failed");
 	}
 }
 
@@ -71,10 +66,10 @@ int	simulation(t_data *data)
 		data->philos[i].last_meal_time = data->start_time;
 		if (pthread_create(&data->philos[i].thread_id, NULL, &routine,
 				&data->philos[i]) != 0)
-			return (join_threads(data), err_msg(THREAD_CREATE_ERR), ERR);
+			return (join_threads(data, i), err_msg(THREAD_CREATE_ERR), ERR);
 		i++;
 	}
 	check_end(data);
-	join_threads(data);
+	join_threads(data, data->nb_of_philos);
 	return (OK);
 }

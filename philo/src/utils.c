@@ -6,7 +6,7 @@
 /*   By: bszabo <bszabo@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:58:26 by bszabo            #+#    #+#             */
-/*   Updated: 2024/05/18 09:20:43 by bszabo           ###   ########.fr       */
+/*   Updated: 2024/05/21 16:41:40 by bszabo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	atoi_philo(char *str)
 
 	num = 0;
 	i = 0;
-	if (!str)
+	if (!str || !str[0] || str[0] == '-' || str[0] == '+')
 		return (ERR);
 	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
 		i++;
@@ -66,20 +66,14 @@ long long	get_current_time(void)
 // print the status of the philosopher with the current timestamp in ms
 void	print_status(t_philo *philo, char *status)
 {
-	t_data	*data;
+	t_data		*data;
+	long long	time;
 
 	data = philo->data;
-	pthread_mutex_lock(&data->lock);
-	if (data->died == false && data->nb_of_full_philos < data->nb_of_philos)
-	{
-		pthread_mutex_unlock(&data->lock);
-		pthread_mutex_lock(&data->print_lock);
-		printf("%lld %d %s\n", get_current_time() - data->start_time,
-			philo->id, status);
-		pthread_mutex_unlock(&data->print_lock);
-	}
-	else
-		pthread_mutex_unlock(&data->lock);
+	time = get_current_time() - data->start_time;
+	pthread_mutex_lock(&data->print_lock);
+	printf("%lld %d %s\n", time, philo->id, status);
+	pthread_mutex_unlock(&data->print_lock);
 }
 
 // sleep for 'time' milliseconds

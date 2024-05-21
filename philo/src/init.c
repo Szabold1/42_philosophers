@@ -6,7 +6,7 @@
 /*   By: bszabo <bszabo@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 10:21:45 by bszabo            #+#    #+#             */
-/*   Updated: 2024/05/16 11:29:28 by bszabo           ###   ########.fr       */
+/*   Updated: 2024/05/21 16:43:30 by bszabo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,10 @@ static int	init_forks(t_data *data)
 	while (i < data->nb_of_philos)
 	{
 		if (pthread_mutex_init(&data->forks[i], NULL) != 0)
+		{
+			clean_up_forks(data->forks, i);
 			return (err_msg(MUTEX_INIT_ERR), ERR);
+		}
 		i++;
 	}
 	return (OK);
@@ -57,6 +60,27 @@ static int	init_philos(t_data *data)
 	return (OK);
 }
 
+// initialize the mutexes
+// return OK if successful, ERR if not
+static int	init_mutexes(t_data *data)
+{
+	if (init_forks(data) == ERR)
+		return (ERR);
+	if (pthread_mutex_init(&data->print_lock, NULL) != 0)
+	{
+		clean_up_forks(data->forks, data->nb_of_philos);
+		return (err_msg(MUTEX_INIT_ERR), ERR);
+	}
+	if (pthread_mutex_init(&data->lock, NULL) != 0)
+	{
+		clean_up_forks(data->forks, data->nb_of_philos);
+		if (pthread_mutex_destroy(&data->print_lock) != 0)
+			err_msg(MUTEX_DESTROY_ERR);
+		return (err_msg(MUTEX_INIT_ERR), ERR);
+	}
+	return (OK);
+}
+
 // initialize the data struct and the philosophers
 // return OK if successful, ERR if not
 int	init(char *argv[], t_data *data)
@@ -74,13 +98,9 @@ int	init(char *argv[], t_data *data)
 	data->start_time = -1;
 	data->nb_of_full_philos = 0;
 	data->died = false;
-	if (init_forks(data) == ERR)
-		return (ERR);
-	if (pthread_mutex_init(&data->print_lock, NULL) != 0)
-		return (err_msg(MUTEX_INIT_ERR), ERR);
-	if (pthread_mutex_init(&data->lock, NULL) != 0)
-		return (err_msg(MUTEX_INIT_ERR), ERR);
 	if (init_philos(data) == ERR)
+		return (ERR);
+	if (init_mutexes(data) == ERR)
 		return (ERR);
 	return (OK);
 }

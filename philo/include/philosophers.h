@@ -6,7 +6,7 @@
 /*   By: bszabo <bszabo@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:37:28 by bszabo            #+#    #+#             */
-/*   Updated: 2024/05/17 09:03:59 by bszabo           ###   ########.fr       */
+/*   Updated: 2024/05/21 16:24:18 by bszabo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 
 // error messages
 # define MUTEX_INIT_ERR "pthread_mutex_init failed"
+# define MUTEX_DESTROY_ERR "pthread_mutex_destroy failed"
 # define THREAD_CREATE_ERR "pthread_create failed"
 # define MALLOC_ERR "malloc failed"
 
@@ -62,6 +63,7 @@ typedef struct s_data
 
 /* ****************************************************** Function prototypes */
 // File: clean_up.c
+void		clean_up_forks(pthread_mutex_t *forks, int i);
 void		clean_up(t_data *data);
 // File: eat.c
 int			philo_eat(t_philo *philo);
