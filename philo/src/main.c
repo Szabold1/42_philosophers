@@ -6,7 +6,7 @@
 /*   By: bszabo <bszabo@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:37:40 by bszabo            #+#    #+#             */
-/*   Updated: 2024/05/21 16:13:27 by bszabo           ###   ########.fr       */
+/*   Updated: 2024/05/28 10:16:57 by bszabo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	check_args(int argc, char *argv[])
 	while (i < argc)
 	{
 		tmp = atoi_philo(argv[i]);
-		if (tmp == ERR || (i == 1 && tmp < 1) || (i == 1 && tmp > 220) || (i == 5 && tmp < 1))
+		if (tmp == ERR || (i == 1 && tmp < 1) || (i == 1 && tmp > 220))
 			return (err_msg("Invalid argument"), ERR);
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: bszabo <bszabo@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 09:51:14 by bszabo            #+#    #+#             */
-/*   Updated: 2024/05/21 16:40:21 by bszabo           ###   ########.fr       */
+/*   Updated: 2024/05/28 13:01:23 by bszabo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ static bool	check_end(t_data *data)
 }
 
 // join the threads of the philosophers
+// i: number of philosophers
 static void	join_threads(t_data *data, int i)
 {
 	while (--i >= 0)
@@ -58,6 +59,8 @@ int	simulation(t_data *data)
 	int	i;
 
 	i = 0;
+	if (data->nb_of_meals == 0)
+		return (OK);
 	data->start_time = get_current_time();
 	if (data->start_time == -1)
 		return (ERR);
