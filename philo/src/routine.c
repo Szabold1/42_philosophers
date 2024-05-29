@@ -6,7 +6,7 @@
 /*   By: bszabo <bszabo@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 13:24:58 by bszabo            #+#    #+#             */
-/*   Updated: 2024/05/19 17:24:15 by bszabo           ###   ########.fr       */
+/*   Updated: 2024/05/29 13:26:24 by bszabo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,7 @@ void	*routine(void *arg)
 	while (data->died == false && data->nb_of_full_philos < data->nb_of_philos)
 	{
 		pthread_mutex_unlock(&data->lock);
-		if (philo_eat(philo) == ERR)
-			break ;
+		philo_eat(philo);
 		philo_sleep(philo);
 		philo_think(philo);
 		pthread_mutex_lock(&data->lock);

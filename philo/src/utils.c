@@ -6,7 +6,7 @@
 /*   By: bszabo <bszabo@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:58:26 by bszabo            #+#    #+#             */
-/*   Updated: 2024/05/21 16:41:40 by bszabo           ###   ########.fr       */
+/*   Updated: 2024/05/29 13:23:35 by bszabo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,7 @@ long long	get_current_time(void)
 	struct timeval	time;
 	long long		time_ms;
 
-	if (gettimeofday(&time, NULL) == -1)
-		return (ERR);
+	gettimeofday(&time, NULL);
 	time_ms = time.tv_sec * 1000 + time.tv_usec / 1000;
 	return (time_ms);
 }
@@ -80,10 +79,13 @@ void	print_status(t_philo *philo, char *status)
 void	sleep_ms(int time)
 {
 	long long	start_time;
+	long long	end_time;
 
 	start_time = get_current_time();
-	if (start_time == -1)
-		return ;
-	while (get_current_time() - start_time < time)
+	end_time = start_time + time;
+	while (start_time < end_time)
+	{
 		usleep(100);
+		start_time = get_current_time();
+	}
 }

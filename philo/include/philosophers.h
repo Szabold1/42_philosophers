@@ -6,7 +6,7 @@
 /*   By: bszabo <bszabo@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:37:28 by bszabo            #+#    #+#             */
-/*   Updated: 2024/05/21 16:24:18 by bszabo           ###   ########.fr       */
+/*   Updated: 2024/05/29 13:26:04 by bszabo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ typedef struct s_data
 void		clean_up_forks(pthread_mutex_t *forks, int i);
 void		clean_up(t_data *data);
 // File: eat.c
-int			philo_eat(t_philo *philo);
+void		philo_eat(t_philo *philo);
 // File: forks.c
 void		take_forks(t_philo *philo);
 void		put_down_forks(t_philo *philo);

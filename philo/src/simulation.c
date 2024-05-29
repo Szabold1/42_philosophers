@@ -6,7 +6,7 @@
 /*   By: bszabo <bszabo@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 09:51:14 by bszabo            #+#    #+#             */
-/*   Updated: 2024/05/28 13:01:23 by bszabo           ###   ########.fr       */
+/*   Updated: 2024/05/29 13:21:05 by bszabo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,6 @@ int	simulation(t_data *data)
 	if (data->nb_of_meals == 0)
 		return (OK);
 	data->start_time = get_current_time();
-	if (data->start_time == -1)
-		return (ERR);
 	while (i < data->nb_of_philos)
 	{
 		data->philos[i].last_meal_time = data->start_time;
