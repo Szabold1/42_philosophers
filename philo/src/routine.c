@@ -23,7 +23,7 @@ static void	philo_sleep(t_philo *philo)
 	{
 		pthread_mutex_unlock(&data->lock);
 		print_status(philo, "is sleeping");
-		sleep_ms(data->time_to_sleep);
+		sleep_ms(data->time_to_sleep, data);
 	}
 	else
 		pthread_mutex_unlock(&data->lock);
@@ -58,7 +58,7 @@ void	*routine(void *arg)
 	data = philo->data;
 	if (data->nb_of_philos == 1)
 		return (print_status(philo, "has taken a fork"),
-			sleep_ms(data->time_to_die), (NULL));
+			sleep_ms(data->time_to_die, data), (NULL));
 	pthread_mutex_lock(&data->lock);
 	while (data->died == false && data->nb_of_full_philos < data->nb_of_philos)
 	{

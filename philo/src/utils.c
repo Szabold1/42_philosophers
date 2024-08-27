@@ -76,7 +76,7 @@ void	print_status(t_philo *philo, char *status)
 }
 
 // sleep for 'time' milliseconds
-void	sleep_ms(int time)
+void	sleep_ms(int time, t_data *data)
 {
 	long long	start_time;
 	long long	end_time;
@@ -85,6 +85,13 @@ void	sleep_ms(int time)
 	end_time = start_time + time;
 	while (start_time < end_time)
 	{
+		pthread_mutex_lock(&data->lock);
+		if (data->died || data->nb_of_full_philos == data->nb_of_philos)
+		{
+			pthread_mutex_unlock(&data->lock);
+			return ;
+		}
+		pthread_mutex_unlock(&data->lock);
 		usleep(100);
 		start_time = get_current_time();
 	}

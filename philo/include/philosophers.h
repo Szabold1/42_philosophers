@@ -81,6 +81,6 @@ void		err_msg(char *msg);
 int			atoi_philo(char *str);
 long long	get_current_time(void);
 void		print_status(t_philo *philo, char *status);
-void		sleep_ms(int time);
+void		sleep_ms(int time, t_data *data);
 
 #endif

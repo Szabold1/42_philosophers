@@ -63,7 +63,7 @@ static void	eat(t_philo *philo)
 			data->nb_of_full_philos++;
 		philo->last_meal_time = get_current_time();
 		pthread_mutex_unlock(&data->lock);
-		sleep_ms(data->time_to_eat);
+		sleep_ms(data->time_to_eat, data);
 	}
 	else
 		pthread_mutex_unlock(&data->lock);
