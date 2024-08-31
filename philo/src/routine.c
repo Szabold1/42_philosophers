@@ -6,7 +6,7 @@
 /*   By: bszabo <bszabo@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 13:24:58 by bszabo            #+#    #+#             */
-/*   Updated: 2024/05/29 13:26:24 by bszabo           ###   ########.fr       */
+/*   Updated: 2024/08/31 14:19:32 by bszabo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	philo_think(t_philo *philo)
 	{
 		pthread_mutex_unlock(&data->lock);
 		print_status(philo, "is thinking");
-		usleep(500);
+		usleep(200);
 	}
 	else
 		pthread_mutex_unlock(&data->lock);
@@ -62,9 +62,14 @@ void	*routine(void *arg)
 	pthread_mutex_lock(&data->lock);
 	while (data->died == false && data->nb_of_full_philos < data->nb_of_philos)
 	{
+		if (data->nb_of_meals != -1 && philo->meals_eaten >= data->nb_of_meals)
+			break ;
 		pthread_mutex_unlock(&data->lock);
 		philo_eat(philo);
 		philo_sleep(philo);
+		if (data->nb_of_philos % 2 != 0 && data->time_to_eat
+			+ data->time_to_sleep < data->time_to_die)
+			sleep_ms(data->time_to_sleep, data);
 		philo_think(philo);
 		pthread_mutex_lock(&data->lock);
 	}

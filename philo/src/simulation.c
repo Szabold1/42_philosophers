@@ -6,7 +6,7 @@
 /*   By: bszabo <bszabo@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 09:51:14 by bszabo            #+#    #+#             */
-/*   Updated: 2024/05/29 13:21:05 by bszabo           ###   ########.fr       */
+/*   Updated: 2024/08/31 10:32:53 by bszabo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static bool	check_end(t_data *data)
 			i++;
 		}
 		pthread_mutex_unlock(&data->lock);
-		usleep(1000);
+		usleep(200);
 	}
 	return (false);
 }

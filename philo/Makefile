@@ -25,7 +25,6 @@ RM			=	rm -rf
 # Source files
 SRC 		=	clean_up.c \
 				eat.c \
-				forks.c \
 				init.c \
 				main.c \
 				routine.c \

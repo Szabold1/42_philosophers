@@ -6,7 +6,7 @@
 /*   By: bszabo <bszabo@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:37:28 by bszabo            #+#    #+#             */
-/*   Updated: 2024/05/29 13:26:04 by bszabo           ###   ########.fr       */
+/*   Updated: 2024/08/31 11:34:32 by bszabo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ typedef struct s_data
 	long long		start_time; // start time in milliseconds
 	int				nb_of_full_philos; // number of philos that ate all meals
 	bool			died; // true if a philosopher died (time_to_die exceeded)
+	bool			should_die;
 	pthread_mutex_t	*forks; // array of mutexes for the forks
 	pthread_mutex_t	print_lock; // mutex for printing
 	pthread_mutex_t	lock; // mutex for general use
@@ -67,9 +68,6 @@ void		clean_up_forks(pthread_mutex_t *forks, int i);
 void		clean_up(t_data *data);
 // File: eat.c
 void		philo_eat(t_philo *philo);
-// File: forks.c
-void		take_forks(t_philo *philo);
-void		put_down_forks(t_philo *philo);
 // File: init.c
 int			init(char *argv[], t_data *data);
 // File: routine.c

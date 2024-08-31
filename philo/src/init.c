@@ -6,11 +6,37 @@
 /*   By: bszabo <bszabo@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 10:21:45 by bszabo            #+#    #+#             */
-/*   Updated: 2024/05/21 16:43:30 by bszabo           ###   ########.fr       */
+/*   Updated: 2024/08/31 12:49:31 by bszabo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+// adjust the time_to_die so it is more accurate when it is close to dieing
+static void	adjust_time_to_die(t_data *data)
+{
+	data->should_die = false;
+	if (data->nb_of_philos % 2 == 0)
+	{
+		if (data->time_to_die <= 2 * data->time_to_eat)
+		{
+			data->time_to_die -= 2;
+			data->should_die = true;
+		}
+		else
+			data->time_to_die += 2;
+	}
+	else
+	{
+		if (data->time_to_die <= 3 * data->time_to_eat)
+		{
+			data->time_to_die -= 2;
+			data->should_die = true;
+		}
+		else
+			data->time_to_die += 2;
+	}
+}
 
 // initialize the forks
 // return OK if successful, ERR if not
@@ -91,6 +117,7 @@ int	init(char *argv[], t_data *data)
 	data->time_to_die = atoi_philo(argv[2]);
 	data->time_to_eat = atoi_philo(argv[3]);
 	data->time_to_sleep = atoi_philo(argv[4]);
+	adjust_time_to_die(data);
 	if (argv[5])
 		data->nb_of_meals = atoi_philo(argv[5]);
 	else

@@ -6,7 +6,7 @@
 /*   By: bszabo <bszabo@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:58:26 by bszabo            #+#    #+#             */
-/*   Updated: 2024/05/29 13:23:35 by bszabo           ###   ########.fr       */
+/*   Updated: 2024/08/31 12:49:22 by bszabo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,11 @@ void	print_status(t_philo *philo, char *status)
 
 	data = philo->data;
 	time = get_current_time() - data->start_time;
+	if (data->should_die)
+		time += 2;
 	pthread_mutex_lock(&data->print_lock);
-	printf("%lld %d %s\n", time, philo->id, status);
+	if (!data->died || status[0] == 'd')
+		printf("%lld %d %s\n", time, philo->id, status);
 	pthread_mutex_unlock(&data->print_lock);
 }
 
