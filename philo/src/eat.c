@@ -6,7 +6,7 @@
 /*   By: bszabo <bszabo@student.42vienna.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 22:01:14 by bszabo            #+#    #+#             */
-/*   Updated: 2024/08/31 12:50:13 by bszabo           ###   ########.fr       */
+/*   Updated: 2024/09/02 08:19:32 by bszabo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,15 @@ static void	eat(t_philo *philo)
 	pthread_mutex_lock(&data->lock);
 	if (data->died == false && data->nb_of_full_philos < data->nb_of_philos)
 	{
+		philo->last_meal_time = get_current_time();
 		pthread_mutex_unlock(&data->lock);
 		print_status(philo, "is eating");
+		sleep_ms(data->time_to_eat, data);
 		pthread_mutex_lock(&data->lock);
 		philo->meals_eaten++;
 		if (philo->meals_eaten == data->nb_of_meals)
 			data->nb_of_full_philos++;
-		philo->last_meal_time = get_current_time();
 		pthread_mutex_unlock(&data->lock);
-		sleep_ms(data->time_to_eat, data);
 	}
 	else
 		pthread_mutex_unlock(&data->lock);
